@@ -1376,7 +1376,7 @@ if(isset($_GET['op']) && $_GET['op'] == 'i'){
         if($config->trackingEnabled === TRUE && !isset($_COOKIE[$track->configUUID])){
             array_push($track->trackList, array(
                 'time'=>date('d-m-Y H:i:s', time()), 
-                'ip' => $_SERVER['REMOTE_ADDR'],
+                'ip' => getClientIp(),
                 'headers' => getallheaders()
             ));
             $track->time = time();
