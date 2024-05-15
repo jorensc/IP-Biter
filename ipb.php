@@ -1376,7 +1376,7 @@ if(isset($_GET['op']) && $_GET['op'] == 'i'){
         if($config->trackingEnabled === TRUE && !isset($_COOKIE[$track->configUUID])){
             array_push($track->trackList, array(
                 'time'=>date('d-m-Y H:i:s', time()), 
-                'ip' => $_SERVER['REMOTE_ADDR'],
+                'ip' => getClientIp(),
                 'headers' => getallheaders()
             ));
             $track->time = time();
@@ -1405,6 +1405,19 @@ if(isset($_GET['op']) && $_GET['op'] == 'i'){
     exit();
 }
 
+function getClientIp() {
+    $ipaddress = '';
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ipList = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $ipaddress = trim($ipList[0]);
+    } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+    } else {
+        $ipaddress = $_SERVER['REMOTE_ADDR'];
+    }
+    return $ipaddress;
+}
+
 if(isset($_GET['op']) && $_GET['op'] == 'l'){
     try{
         if(!isset($_GET['tid']) || $_GET['tid']=='')
@@ -1422,7 +1435,7 @@ if(isset($_GET['op']) && $_GET['op'] == 'l'){
         if($config->trackingEnabled === TRUE && !isset($_COOKIE[$track->configUUID])){
             array_push($track->trackList, array(
                 'time'=>date('d-m-Y H:i:s', time()),
-                'ip' => $_SERVER['REMOTE_ADDR'],
+                'ip' => getClientIp(),
                 'headers' => getallheaders()
             ));
             $track->time = time();
